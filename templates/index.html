@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Student Assistant 🤖 | Smart Campus Chatbot</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        /* Additional inline styles for analytics visibility */
+        .analytics-fix {
+            margin-top: auto !important;
+            margin-bottom: 20px !important;
+            padding: 15px !important;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+            border-radius: 12px !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .analytics-fix h3 {
+            color: #94a3b8 !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            margin-bottom: 15px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .stats-grid-fix {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 10px !important;
+            margin-bottom: 15px !important;
+        }
+        
+        .stat-card-fix {
+            background: rgba(255, 255, 255, 0.05) !important;
+            padding: 12px !important;
+            border-radius: 8px !important;
+            text-align: center !important;
+            transition: all 0.3s ease !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+        
+        .stat-card-fix:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-2px) !important;
+            border-color: rgba(99, 102, 241, 0.3) !important;
+        }
+        
+        .stat-icon-fix {
+            width: 32px !important;
+            height: 32px !important;
+            margin: 0 auto 8px auto !important;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            border-radius: 6px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: white !important;
+            font-size: 14px !important;
+        }
+        
+        .stat-value-fix {
+            font-size: 18px !important;
+            font-weight: 700 !important;
+            color: white !important;
+            display: block !important;
+            margin-bottom: 4px !important;
+        }
+        
+        .stat-label-fix {
+            font-size: 11px !important;
+            color: #94a3b8 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        .stats-details-fix {
+            margin-top: 15px !important;
+            padding-top: 15px !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+        
+        .stat-row-fix {
+            display: flex !important;
+            justify-content: space-between !important;
+            margin-bottom: 8px !important;
+            font-size: 12px !important;
+        }
+        
+        .stat-row-fix:last-child {
+            margin-bottom: 0 !important;
+        }
+        
+        .stat-row-label {
+            color: #cbd5e1 !important;
+        }
+        
+        .stat-row-value {
+            color: white !important;
+            font-weight: 600 !important;
+        }
+        
+        .stat-row-value.high {
+            color: #10b981 !important;
+        }
+        
+        .stat-row-value.medium {
+            color: #f59e0b !important;
+        }
+        
+        .stat-row-value.low {
+            color: #ef4444 !important;
+        }
+        
+        /* Animation for stats update */
+        @keyframes statUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .stat-update {
+            animation: statUpdate 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Enhanced Sidebar -->
+        <aside class="sidebar">
+            <!-- Header -->
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">🎓</div>
+                    <div class="logo-text">
+                        <h2>AI Student Assistant</h2>
+                        <div class="status">
+                            <span class="status-dot active"></span>
+                            <span class="status-text">Online • AI Powered</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <!-- User Profile -->
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="user-info">
+                    <h4 id="greetingTime">Good Morning</h4>
+                    <p>Welcome to Student Portal 👋</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div class="actions-grid" id="quickActions">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Smart Suggestions -->
+            <div class="suggestions">
+                <h3><i class="fas fa-lightbulb"></i> Smart Suggestions</h3>
+                <div class="suggestions-list" id="suggestionsList">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <!-- ANALYTICS DASHBOARD - FIXED VERSION -->
+            <div class="analytics-fix" id="analyticsDashboard">
+                <h3><i class="fas fa-chart-line"></i> Analytics Dashboard</h3>
+                
+                <div class="stats-grid-fix">
+                    <div class="stat-card-fix" id="statTotalQueries">
+                        <div class="stat-icon-fix"><i class="fas fa-comments"></i></div>
+                        <span class="stat-value-fix">0</span>
+                        <span class="stat-label-fix">Total Queries</span>
+                    </div>
+                    
+                    <div class="stat-card-fix" id="statActiveUsers">
+                        <div class="stat-icon-fix"><i class="fas fa-users"></i></div>
+                        <span class="stat-value-fix">0</span>
+                        <span class="stat-label-fix">Active Users</span>
+                    </div>
+                    
+                    <div class="stat-card-fix" id="statAccuracy">
+                        <div class="stat-icon-fix"><i class="fas fa-brain"></i></div>
+                        <span class="stat-value-fix">95%</span>
+                        <span class="stat-label-fix">AI Accuracy</span>
+                    </div>
+                </div>
+                
+                <div class="stats-details-fix" id="statsDetails">
+                    <div class="stat-row-fix">
+                        <span class="stat-row-label">Recent Activity (24h):</span>
+                        <span class="stat-row-value" id="statRecentActivity">0</span>
+                    </div>
+                    <div class="stat-row-fix">
+                        <span class="stat-row-label">Today's Queries:</span>
+                        <span class="stat-row-value" id="statTodayActivity">0</span>
+                    </div>
+                    <div class="stat-row-fix">
+                        <span class="stat-row-label">Success Rate:</span>
+                        <span class="stat-row-value high" id="statSuccessRate">0%</span>
+                    </div>
+                    <div class="stat-row-fix">
+                        <span class="stat-row-label">Avg. Confidence:</span>
+                        <span class="stat-row-value medium" id="statAvgConfidence">0%</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 12px; text-align: center;">
+                    <button onclick="updateStatistics()" class="refresh-stats-btn" style="
+                        background: rgba(99, 102, 241, 0.1);
+                        border: 1px solid rgba(99, 102, 241, 0.3);
+                        color: #6366f1;
+                        padding: 6px 12px;
+                        border-radius: 6px;
+                        font-size: 11px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    ">
+                        <i class="fas fa-sync-alt"></i> Refresh Stats
+                    </button>
+                    <div style="font-size: 10px; color: #64748b; margin-top: 8px;">
+                        Last updated: <span id="lastUpdated">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-left">
+                    <h1>🤖 AI Student Assistant</h1>
+                    <p class="subtitle">Your 24/7 intelligent campus companion • Powered by AI</p>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" id="voiceBtn" title="Voice Input">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="header-btn" id="uploadBtn" title="Upload File">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                    <button class="header-btn" id="historyBtn" title="Chat History">
+                        <i class="fas fa-history"></i>
+                    </button>
+                    <button class="header-btn" id="exportBtn" title="Export Chat">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="header-btn" id="helpBtn" title="Help">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Messages Container -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Welcome Message (will be added by JavaScript) -->
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-content">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="typing-text">AI Assistant is thinking...</span>
+                </div>
+                <div class="typing-ai">
+                    <i class="fas fa-brain"></i> Processing with AI...
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-container">
+                    <div class="input-icons">
+                        <button class="input-icon" id="emojiBtn" title="Emoji">
+                            <i class="far fa-smile"></i>
+                        </button>
+                        <button class="input-icon" id="attachBtn" title="Attach File">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                    </div>
+                    <input type="text" 
+                           id="messageInput" 
+                           placeholder="Ask me anything about academics, fees, campus life... (Press Enter to send)"
+                           autocomplete="off"
+                           autofocus>
+                    <div class="input-actions">
+                        <button class="action-btn send-btn" id="sendBtn" title="Send Message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <button class="action-btn voice-btn" id="toggleVoiceBtn" title="Toggle Voice Input">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="input-footer">
+                    <div class="input-hints">
+                        <span class="hint"><i class="fas fa-info-circle"></i> Try: "When are mid-term exams?" or "How to apply for hostel?"</span>
+                    </div>
+                    <div class="input-stats">
+                        <span class="stat"><i class="fas fa-shield-alt"></i> Secure & Private</span>
+                        <span class="stat"><i class="fas fa-bolt"></i> Fast Response</span>
+                        <span class="stat"><i class="fas fa-check-circle"></i> AI-Powered</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="voiceModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-microphone"></i> Voice Assistant</h3>
+            <div class="voice-visualizer">
+                <div class="voice-wave" id="voiceWave">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+                <p class="voice-status">Click and speak your question...</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary" id="startVoice">Start Listening</button>
+                <button class="modal-btn" onclick="closeModal('voiceModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="historyModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-history"></i> Chat History</h3>
+            <div class="history-list" id="historyList">
+                <!-- History will be loaded here -->
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn" onclick="clearHistory()">Clear History</button>
+                <button class="modal-btn" onclick="closeModal('historyModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-question-circle"></i> Help & Support</h3>
+            <div class="help-content">
+                <h4>How to use the AI Student Assistant:</h4>
+                <ul>
+                    <li><strong>Quick Actions:</strong> Click buttons for instant answers</li>
+                    <li><strong>Type Naturally:</strong> Ask questions like you're talking to a friend</li>
+                    <li><strong>Smart Suggestions:</strong> Get relevant suggestions based on context</li>
+                    <li><strong>Analytics:</strong> Check statistics on the sidebar</li>
+                    <li><strong>Theme:</strong> Switch between light/dark mode</li>
+                </ul>
+                <h4>Supported Topics:</h4>
+                <div class="topics-grid">
+                    <span class="topic-badge">📅 Exams</span>
+                    <span class="topic-badge">💰 Fees</span>
+                    <span class="topic-badge">📚 Library</span>
+                    <span class="topic-badge">🏠 Hostel</span>
+                    <span class="topic-badge">🚌 Transport</span>
+                    <span class="topic-badge">📄 Documents</span>
+                    <span class="topic-badge">🎓 Courses</span>
+                    <span class="topic-badge">📊 Results</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary" onclick="sendQuickMessage('help')">Ask for Help</button>
+                <button class="modal-btn" onclick="closeModal('helpModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="fas fa-info-circle"></i>
+            <span id="notificationText"></span>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    
+    <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+    <!-- Inline JavaScript for analytics -->
+    <script>
+        // Function to update time-based greeting
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting = "Good Evening";
+            
+            if (hour < 12) greeting = "Good Morning";
+            else if (hour < 18) greeting = "Good Afternoon";
+            
+            const greetingElement = document.getElementById('greetingTime');
+            if (greetingElement) {
+                greetingElement.textContent = greeting;
+            }
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateGreeting();
+            
+            // Update greeting every minute
+            setInterval(updateGreeting, 60000);
+            
+            // Add click event to export button
+            document.getElementById('exportBtn').addEventListener('click', function() {
+                showNotification('📥 Export feature coming soon!');
+            });
+            
+            // Add click event to help button
+            document.getElementById('helpBtn').addEventListener('click', function() {
+                document.getElementById('helpModal').style.display = 'flex';
+            });
+            
+            // Initialize analytics with sample data if API fails
+            setTimeout(() => {
+                const analyticsDashboard = document.getElementById('analyticsDashboard');
+                if (analyticsDashboard) {
+                    analyticsDashboard.style.display = 'block';
+                }
+            }, 1000);
+        });
+        
+        // Make functions globally available
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        };
+        
+        window.showNotification = function(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        };
+    </script>
+</body>
+</html>

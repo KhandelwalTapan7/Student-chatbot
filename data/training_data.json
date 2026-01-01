@@ -1,0 +1,30 @@
+{
+    "greeting": {
+        "patterns": ["hello", "hi", "hey", "good morning", "good afternoon", "good evening"],
+        "responses": ["Hello! How can I help you today?", "Hi there! What can I assist you with?"]
+    },
+    "attendance": {
+        "patterns": ["attendance", "present percentage", "attendance record", "how many days present", "attendance policy"],
+        "responses": ["Your attendance is available on the student portal.", "Attendance records are updated weekly. You need 75% attendance to be eligible for exams."]
+    },
+    "exam_schedule": {
+        "patterns": ["exam dates", "when are exams", "exam schedule", "final exam timetable", "mid term exams"],
+        "responses": ["Exam schedules are published one month before exams.", "Check the university website or your department notice board for exam dates."]
+    },
+    "fees": {
+        "patterns": ["fee payment", "tuition fees", "semester fees", "payment deadline", "how to pay fees"],
+        "responses": ["Fee deadlines are mentioned in the academic calendar.", "You can pay fees through the online portal using credit card or net banking."]
+    },
+    "courses": {
+        "patterns": ["available courses", "course registration", "elective subjects", "course syllabus", "register for courses"],
+        "responses": ["Course catalogs are available on the department website.", "Register for courses through the student portal during the registration period."]
+    },
+    "library": {
+        "patterns": ["library timings", "library hours", "borrow books", "library card"],
+        "responses": ["Library is open from 8 AM to 8 PM on weekdays.", "You need a student ID card to borrow books from the library."]
+    },
+    "hostel": {
+        "patterns": ["hostel admission", "hostel fees", "hostel facilities", "room allotment"],
+        "responses": ["Hostel admission forms are available at the hostel office.", "Hostel fees vary depending on the room type and facilities."]
+    }
+}
